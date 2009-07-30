@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Timothy Yung" />
+    <title>Home of [Timothy Yung]</title>
+    <!-- link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" / -->
+    <link href="./stylesheets/master.css" media="screen" rel="Stylesheet" type="text/css" />
+  </head>
+  <body>
+    <header>
+      <h1>tim[yung]sters</h1>
+      <p><dfn>name</dfn>, <dfn>alias</dfn> = <em>"Timothy Robert Yung"</em>, <em>"yungsters"</em></p>
+    </header>
+    <section>
+      <h1><dfn>presence</dfn> = {</h1>
+      <ul>
+        <li><a href="http://facebook.com/yungsters/" title="View Facebook Profile"><span>
+            <dfn>:facebook</dfn> => <em>"facebook.com/<mark>#{alias}</mark>"</em>
+            </span></a></li>
+        <li><a href="http://twitter.com/yungsters/" title="Follow on Twitter"><span>
+            <dfn>:twitter</dfn> => <em>"twitter.com/<mark>#{alias}</mark>"</em>
+            </span></a></li>
+        <li><a href="http://youtube.com/yungsters/" title="View YouTube Channel"><span>
+            <dfn>:youtube</dfn> => <em>"youtube.com/<mark>#{alias}</mark>"</em>
+            </span></a></li>
+      </ul>
+      <code>}.to_a.map {|name, path| link_to name.to_s.capitalize, path }.join "&lt;br /&gt;"</code>
+    </section>
+    <section>
+      <h1><dfn>works</dfn> = {</h1>
+      <ul>
+        <li><a href="http://berkeleypbl.com/" title="View the Home of Berkeley PBL"><span>
+            <dfn>:berkeleypbl</dfn> => <em>"berkeleypbl.com"</em>
+            </span></a></li>
+        <li><a href="http://yungsters.net/" title="View my Personal Experiment"><span>
+            <dfn>:personal</dfn> => <em>"yungsters.net"</em>
+            </span></a></li>
+        <li><a href="http://yungsters.com/" title="Refresh this Page"><span>
+            <dfn>:portfolio</dfn> => <strong>self</strong>
+            </span></a></li>
+        <li><a href="http://calendar.yahoo.com/" title="View the Yahoo! Calendar"><span>
+            <dfn>:y_calendar</dfn> => <em>"calendar.yahoo.com"</em>
+            </span></a></li>
+      </ul>
+      <code>}.to_a.map {|name, path| link_to name.to_s.capitalize, path }.join "&lt;br /&gt;"</code>
+    </section>
+    <aside>
+      <h1><dfn>contact</dfn> = {</h1>
+      <ul>
+        <li><a href="aim:goim?screenname=xxyungstersxx" title="Send me a message via AIM"><span>
+            <dfn>:aim_sn</dfn> => <em>"xx<mark>#{alias}</mark>xx"</em>
+            </span></a></li>
+        <li><a href="#" title="Send me an Email"><span>
+            <dfn>:email</dfn> => <em>"#{alias}@gmail.com"</em>
+            </span></a></li>
+      </ul>
+      <code>}</code>
+    </aside>
+    <footer>
+      <code><dfn>footnote</dfn> = [</code>
+      <ol>
+        <li>"Copyright &amp;copy; 2009 <mark>#{link_to name, contact[:email]}</mark>.",</li>
+        <li>"All rights reserved."</li>
+      </ol>
+      <code>].join ""</code>
+    </footer>
+  </body>
+</html>

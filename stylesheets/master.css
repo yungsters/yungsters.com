@@ -1,0 +1,96 @@
+/*
+Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.7.0 (modified)
+*/
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,code,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
+
+/*
+Copyright (c) 2009, Timothy Yung. All rights reserved.
+*/
+
+html {
+	background: #141414 url(../images/background.png) top repeat-x;
+	color: #505050;
+	font-size: 16pt;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	height: 100%;
+}
+
+body {
+	background: transparent url(../images/vector.png) center top no-repeat;
+	height: 100%;
+	min-height: 780px;
+	min-width: 800px;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+dfn {
+	color: #f00;
+}
+
+header dfn, h1 dfn {
+	color: #fff;
+}
+
+footer code dfn {
+	color: #505050;
+}
+
+em {
+	color: #2dcedb;
+}
+
+strong {
+	color: #fff;
+}
+
+aside, footer, header, section, ul a {
+	display: block;
+}
+
+aside, footer, section {
+	margin-top: 1em;
+}
+
+header h1 {
+	text-indent: -3000px;
+	background: transparent url(../images/heading.png) center bottom no-repeat;
+	width: 100%;
+	height: 162px;
+}
+
+h1, code, header p, ol {
+	display: block;
+	margin: 0 auto;
+	width: 800px;
+}
+
+ul span {
+	display: block;
+	position: relative;
+	margin: 0 auto;
+	padding-left: 160px;
+	width: 640px;
+}
+
+ul span dfn {
+	position: absolute;
+	left: 0;
+}
+
+ul a:hover {
+	background: transparent url(../images/line-highlight.png);
+}
+
+ol li, ul dfn {
+	padding-left: 1em;
+}
+
+
