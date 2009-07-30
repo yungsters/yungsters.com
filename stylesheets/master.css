@@ -12,6 +12,7 @@ Copyright (c) 2009, Timothy Yung. All rights reserved.
 */
 
 html {
+	position: relative;
 	background: #141414 url(../images/background.png) top repeat-x;
 	color: #505050;
 	font-size: 16pt;
@@ -56,7 +57,7 @@ aside, footer, header, section, ul a {
 }
 
 aside, footer, section {
-	margin-top: 1em;
+	margin-top: 1.2em;
 }
 
 header h1 {
@@ -85,12 +86,16 @@ ul span dfn {
 	left: 0;
 }
 
+ul a {
+	position: relative;
+	z-index: 1;
+	outline: none;
+}
+
 ul a:hover {
 	background: transparent url(../images/line-highlight.png);
 }
 
-ol li, ul dfn {
+footer li, ul dfn {
 	padding-left: 1em;
 }
-
-
