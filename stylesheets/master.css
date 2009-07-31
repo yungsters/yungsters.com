@@ -99,7 +99,7 @@ footer li, ul dfn {
 }
 
 #line-numbers {
-	color: #505050;
+	color: #ccc;
 	position: absolute;
 	top: 162px;
 	left: 50%;

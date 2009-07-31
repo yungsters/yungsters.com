@@ -5,27 +5,44 @@ var YUNG = {
         var numListEl = $("<ol id=\"line-numbers\"></ol>").prependTo("body");
         var maxHeight = numListEl.height();
         
-        /* Fade Settings */
-        var delay    = 25;
-        var duration = 200;
-        var opacity  = 0.2;
+        var config = {
+            duration: 200,   // Fade duration
+            delay:    25,    // Delay between adding lines
+            interval: 15000, // Interval to repeat fading
+            normal:   0.1,   // Target opacity
+            repeat:   0.5    // Initial opacity for repeats
+        };
+        
+        var startFade = function(el) {
+            if (el.css("opacity") == config.normal) {
+                el.css({ opacity: config.repeat })
+            }
+            el.fadeTo(config.duration, config.normal);
+        };
+        
+        var addItemEl = function(i) {
+            var el = $("<li>" + i + "</li>").appendTo(numListEl);
+            startFade(el);
+            setInterval(function() {
+                startFade(el);
+            }, config.interval);
+        };
         
         var itemCount = $("li", numListEl).size();
         if (itemCount == 0) {
-            $("<li>1</li>").appendTo(numListEl).fadeTo(duration, opacity);
+            addItemEl(1);
             itemCount += 1;
         }
         var oneHeight = $("li", numListEl).height();
         
-        var addItemEl = function() {
+        var addNextEl = function() {
             if ((itemCount * oneHeight) < maxHeight) {
                 itemCount += 1;
-                setTimeout(addItemEl, delay);
-                var el = $("<li>" + itemCount + "</li>").appendTo(numListEl);
-                el.fadeTo(duration, opacity);
+                addItemEl(itemCount);
+                setTimeout(addNextEl, config.delay);
             }
         };
-        addItemEl();
+        addNextEl();
     }
 };
 
