@@ -50,3 +50,7 @@ $(document).ready(function() {
     YUNG.showLineNumbers();
 });
 
+try {
+    var pageTracker = _gat._getTracker("UA-9951783-2");
+    pageTracker._trackPageview();
+} catch(err) {}
