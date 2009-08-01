@@ -12,7 +12,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input
 html {
 	position: relative;
 	background: #141414 url(../images/background.png) top repeat-x;
-	color: #505050;
+	color: #2b2b2b;
 	font-size: 16pt;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	height: 100%;
@@ -40,7 +40,13 @@ header dfn, h1 dfn {
 }
 
 footer code dfn {
-	color: #505050;
+	color: #fff;
+}
+
+code {
+	color: #fff;
+	opacity: 0.1;
+	filter:alpha(opacity=10);
 }
 
 em {
