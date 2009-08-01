@@ -7,7 +7,8 @@ var YUNG = {
             delay:    25,    // Delay between adding lines
             interval: 15000, // Interval to repeat fading
             normal:   0.1,   // Target opacity
-            repeat:   0.5    // Initial opacity for repeats
+            repeat:   0.5,   // Initial opacity for repeats
+            hover:    0.7    // Mouseover opacity
         };
         var container = $("<ol id=\"line-numbers\"></ol>").prependTo("body");
         var numCount = 0;
@@ -16,8 +17,10 @@ var YUNG = {
             var el = $("<li>" + ++numCount + "</li>").appendTo(container);
             el.fadeTo(config.duration, config.normal);
             setInterval(function() {
-                el.css({ opacity: config.repeat })
-                el.fadeTo(config.duration, config.normal);
+                if (el.css("opacity") == config.normal) {
+                    el.css({ opacity: config.repeat })
+                    el.fadeTo(config.duration, config.normal);
+                }
             }, config.interval);
         };
         
@@ -32,6 +35,16 @@ var YUNG = {
             }
         };
         addUntilFull();
+        
+        $("a[data-line]").mouseover(function() {
+            var lineNumber = parseInt(this.getAttribute("data-line"), 10);
+            $("li:eq(" + (lineNumber - 1) + ")", container).css({ opacity: config.hover });
+        });
+        
+        $("a[data-line]").mouseout(function() {
+            var lineNumber = parseInt(this.getAttribute("data-line"), 10);
+            $("li:eq(" + (lineNumber - 1) + ")", container).css({ opacity: config.normal });
+        });
     },
     attachAliasEffect: function() {
         var config = {
