@@ -57,6 +57,10 @@ strong {
 	color: #fff;
 }
 
+footer strong {
+	color: #505050;
+}
+
 aside, footer, header, section, ul a {
 	display: block;
 }
