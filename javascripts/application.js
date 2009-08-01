@@ -1,6 +1,10 @@
 /* Copyright (c) 2009, Timothy Yung & Anhang Zhu. All rights reserved. */
 
 var YUNG = {
+    createEmailLink: function() {
+        var domain = "gmail.com"; // Indirection to trick spambots
+        $("a:last").attr({ href: "mailto:yungsters@" + domain });
+    },
     showLineNumbers: function() {
         var config = {
             duration: 200,   // Fade duration
@@ -84,6 +88,7 @@ var YUNG = {
 };
 
 $(document).ready(function() {
+    YUNG.createEmailLink();
     YUNG.showLineNumbers();
     YUNG.attachAliasEffect();
 });
