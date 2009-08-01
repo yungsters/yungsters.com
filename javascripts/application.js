@@ -72,8 +72,12 @@ var YUNG = {
         
         $("mark").each(function(i) {
             var el = this;
+            var animating = false;
             $(el).closest("a").mouseover(function() {
-                transformNextChar(el);
+                if (!animating) {
+                    animating = true;
+                    transformNextChar(el);
+                }
             });
         });
     }
