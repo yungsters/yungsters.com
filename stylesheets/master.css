@@ -61,10 +61,6 @@ aside, footer, header, section, ul a {
 	display: block;
 }
 
-aside, footer, section {
-	margin-top: 1.2em;
-}
-
 header h1 {
 	text-indent: -3000px;
 	background: transparent url(../images/heading.png) center bottom no-repeat;
