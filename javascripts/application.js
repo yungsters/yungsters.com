@@ -13,7 +13,7 @@ var YUNG = {
         var container = $("<ol id=\"line-numbers\"></ol>").prependTo("body");
         var numCount = 0;
         
-        var addNumber = function() {
+        var addNumbers = function() {
             var el = $("<li>" + ++numCount + "</li>").appendTo(container);
             el.fadeTo(config.duration, config.normal);
             setInterval(function() {
@@ -22,19 +22,11 @@ var YUNG = {
                     el.fadeTo(config.duration, config.normal);
                 }
             }, config.interval);
-        };
-        
-        addNumber();
-        var eachHeight = $("li", container).height();
-        var fullHeight = container.height();
-        
-        var addUntilFull = function() {
-            if ((numCount * eachHeight) < fullHeight) {
-                addNumber();
-                setTimeout(addUntilFull, config.delay);
+            if (numCount < 100) {
+                setTimeout(addNumbers, config.delay);
             }
         };
-        addUntilFull();
+        addNumbers();
         
         $("a[data-line]").mouseover(function() {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
