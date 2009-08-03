@@ -76,9 +76,6 @@ var YUNG = {
             return prefix + char + suffix;
         };
         var transformNextChar = function (el) {
-            if (!el.hasOwnProperty("step")) {
-                el.step = 0;
-            }
             if (el.step < 15) {
                 if (el.step < 5) {
                     el.innerHTML = swapCharAt(el.innerHTML,
@@ -102,10 +99,9 @@ var YUNG = {
         
         $("mark").each(function (i) {
             var el = this;
-            var animating = false;
             $(el).closest("a").mouseover(function () {
-                if (!animating) {
-                    animating = true;
+                if (!el.hasOwnProperty("step")) {
+                    el.step = 0;
                     transformNextChar(el);
                 }
             });
