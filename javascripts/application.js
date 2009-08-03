@@ -14,41 +14,48 @@ var YUNG = {
             repeat:   0.5,   // Initial opacity for repeats
             hover:    0.7    // Mouseover opacity
         };
-        var container = $("<ol id=\"line-numbers\"></ol>").prependTo("body");
-        var numCount = 0;
+        var container  = $("<ol id=\"line-numbers\"></ol>").prependTo("body");
+        var firstEl    = $("<li>1</li>").appendTo(container);
+        var eachHeight = firstEl.height();
+        var numCount   = 1;
+        
+        firstEl.fadeTo(config.duration, config.normal);
         
         var addNumbers = function () {
-            var el = $("<li>" + ++numCount + "</li>").appendTo(container);
-            el.fadeTo(config.duration, config.normal);
-            if (numCount < 100) {
+            if ((numCount * eachHeight) < container.height()) {
+                var el = $("<li>" + ++numCount + "</li>").appendTo(container);
+                el.fadeTo(config.duration, config.normal);
                 setTimeout(addNumbers, config.delay);
             }
         };
-        addNumbers();
-        
-        var firstEl = $("li:first", container);
+        var resizeContainer = function () {
+            container.css({ height: $(this).height() });
+            addNumbers();
+        };
+        resizeContainer();
+        $(window).resize(resizeContainer);
         
         var fadeNumbers = function (el) {
-            if (el) {
-                setTimeout(function () {
-                    fadeNumbers(el.next("li"));
-                }, config.delay);
-                if (el.css("opacity") == config.normal) {
-                    el.css({ opacity: config.repeat })
-                    el.fadeTo(config.duration, config.normal);
+            setTimeout(function () {
+                var nextEl = el.next("li");
+                if (nextEl.size() > 0) {
+                    fadeNumbers(nextEl);
                 }
+            }, config.delay);
+            if (el.css("opacity") != config.hover) {
+                el.css({ opacity: config.repeat })
+                el.fadeTo(config.duration, config.normal);
             }
         };
         setInterval(function () {
             fadeNumbers(firstEl);
         }, config.interval);
-        
+
         $("a[data-line]").mouseover(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
             var el = $("li:eq(" + (lineNumber - 1) + ")", container);
             el.css({ opacity: config.hover });
         });
-        
         $("a[data-line]").mouseout(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
             var el = $("li:eq(" + (lineNumber - 1) + ")", container);
