@@ -21,9 +21,14 @@ html {
 
 body {
 	background: transparent url(../images/vector.png) center top no-repeat;
+}
+
+body * {
 	color: #2b2b2b;
 	font-size: 16pt;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-style: normal;
+	text-decoration: none;
 }
 
 header p {
