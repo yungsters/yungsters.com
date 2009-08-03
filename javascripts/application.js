@@ -1,11 +1,11 @@
 /* Copyright (c) 2009, Timothy Yung & Anhang Zhu. All rights reserved. */
 
 var YUNG = {
-    createEmailLink: function() {
+    createEmailLink: function () {
         var domain = "gmail.com"; // Indirection to trick spambots
         $("a:last").attr({ href: "mailto:yungsters@" + domain });
     },
-    showLineNumbers: function() {
+    showLineNumbers: function () {
         var config = {
             duration: 200,   // Fade duration
             delay:    25,    // Delay between adding lines
@@ -17,10 +17,10 @@ var YUNG = {
         var container = $("<ol id=\"line-numbers\"></ol>").prependTo("body");
         var numCount = 0;
         
-        var addNumbers = function() {
+        var addNumbers = function () {
             var el = $("<li>" + ++numCount + "</li>").appendTo(container);
             el.fadeTo(config.duration, config.normal);
-            setInterval(function() {
+            setInterval(function () {
                 if (el.css("opacity") == config.normal) {
                     el.css({ opacity: config.repeat })
                     el.fadeTo(config.duration, config.normal);
@@ -32,28 +32,28 @@ var YUNG = {
         };
         addNumbers();
         
-        $("a[data-line]").mouseover(function() {
+        $("a[data-line]").mouseover(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
             $("li:eq(" + (lineNumber - 1) + ")", container).css({ opacity: config.hover });
         });
         
-        $("a[data-line]").mouseout(function() {
+        $("a[data-line]").mouseout(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
             $("li:eq(" + (lineNumber - 1) + ")", container).css({ opacity: config.normal });
         });
     },
-    attachAliasEffect: function() {
+    attachAliasEffect: function () {
         var config = {
             delay: 70,         // Delay between transforming characters
             alias: "yungsters" // Target replacement string
         };
-        var randomChar = function() {
+        var randomChar = function () {
             return String.fromCharCode(97 + Math.round(Math.random() * 25));
         };
-        var swapCharAt = function(string, index, char) {
+        var swapCharAt = function (string, index, char) {
             return string.substr(0, index) + char + string.substr(index + 1, string.length);
         };
-        var transformNextChar = function(el) {
+        var transformNextChar = function (el) {
             if (!el.hasOwnProperty("step")) {
                 el.step = 0;
             }
@@ -68,16 +68,16 @@ var YUNG = {
                     el.innerHTML = swapCharAt(el.innerHTML, 14 - el.step, config.alias.charAt(14 - el.step));
                 }
                 el.step ++;
-                setTimeout(function() {
+                setTimeout(function () {
                     transformNextChar(el);
                 }, config.delay);
             }
         };
         
-        $("mark").each(function(i) {
+        $("mark").each(function (i) {
             var el = this;
             var animating = false;
-            $(el).closest("a").mouseover(function() {
+            $(el).closest("a").mouseover(function () {
                 if (!animating) {
                     animating = true;
                     transformNextChar(el);
@@ -87,7 +87,7 @@ var YUNG = {
     }
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
     YUNG.createEmailLink();
     YUNG.showLineNumbers();
     YUNG.attachAliasEffect();
