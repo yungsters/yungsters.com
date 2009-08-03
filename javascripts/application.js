@@ -100,7 +100,7 @@ var YUNG = {
         $("mark").each(function (i) {
             var el = this;
             $(el).closest("a").mouseover(function () {
-                if (!el.hasOwnProperty("step")) {
+                if (!el.step) {
                     el.step = 0;
                     transformNextChar(el);
                 }
