@@ -29,7 +29,7 @@ var YUNG = {
             }
         };
         var resizeContainer = function () {
-            container.css({ height: $(this).height() });
+            container.css({ height: $(document).height() });
             addNumbers();
         };
         resizeContainer();
