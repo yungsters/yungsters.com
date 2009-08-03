@@ -34,12 +34,14 @@ var YUNG = {
         
         $("a[data-line]").mouseover(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
-            $("li:eq(" + (lineNumber - 1) + ")", container).css({ opacity: config.hover });
+            var el = $("li:eq(" + (lineNumber - 1) + ")", container);
+            el.css({ opacity: config.hover });
         });
         
         $("a[data-line]").mouseout(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
-            $("li:eq(" + (lineNumber - 1) + ")", container).css({ opacity: config.normal });
+            var el = $("li:eq(" + (lineNumber - 1) + ")", container);
+            el.css({ opacity: config.normal });
         });
     },
     attachAliasEffect: function () {
@@ -51,7 +53,9 @@ var YUNG = {
             return String.fromCharCode(97 + Math.round(Math.random() * 25));
         };
         var swapCharAt = function (string, index, char) {
-            return string.substr(0, index) + char + string.substr(index + 1, string.length);
+            var prefix = string.substr(0, index);
+            var suffix = string.substr(index + 1, string.length);
+            return prefix + char + suffix;
         };
         var transformNextChar = function (el) {
             if (!el.hasOwnProperty("step")) {
@@ -59,15 +63,19 @@ var YUNG = {
             }
             if (el.step < 15) {
                 if (el.step < 5) {
-                    el.innerHTML = swapCharAt(el.innerHTML, el.step + 2, randomChar());
+                    el.innerHTML = swapCharAt(el.innerHTML,
+                        el.step + 2, randomChar());
                 } else if (el.step < 6) {
-                    el.innerHTML = swapCharAt(el.innerHTML, el.step + 2, randomChar() + "}");
+                    el.innerHTML = swapCharAt(el.innerHTML,
+                        el.step + 2, randomChar() + "}");
                 } else if (el.step < 13) {
-                    el.innerHTML = swapCharAt(el.innerHTML, el.step - 4, config.alias.charAt(el.step - 4))
+                    el.innerHTML = swapCharAt(el.innerHTML,
+                        el.step - 4, config.alias.charAt(el.step - 4))
                 } else {
-                    el.innerHTML = swapCharAt(el.innerHTML, 14 - el.step, config.alias.charAt(14 - el.step));
+                    el.innerHTML = swapCharAt(el.innerHTML,
+                        14 - el.step, config.alias.charAt(14 - el.step));
                 }
-                el.step ++;
+                el.step++;
                 setTimeout(function () {
                     transformNextChar(el);
                 }, config.delay);
