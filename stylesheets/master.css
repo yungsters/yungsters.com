@@ -9,21 +9,21 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input
 
 /* Copyright (c) 2009, Timothy Yung. All rights reserved. */
 
-html {
+html, body {
 	position: relative;
+	min-height: 780px;
+	min-width: 800px;
+}
+
+html {
 	background: #141414 url(../images/background.png) top repeat-x;
 	color: #2b2b2b;
 	font-size: 16pt;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	height: 100%;
 }
 
 body {
-	position: relative;
 	background: transparent url(../images/vector.png) center top no-repeat;
-	height: 100%;
-	min-height: 780px;
-	min-width: 800px;
 }
 
 header p {
@@ -109,10 +109,13 @@ footer li, ul dfn {
 	padding-left: 1em;
 }
 
+footer {
+	padding-bottom: 2em;
+}
+
 #line-numbers {
 	position: absolute;
 	color: #ccc;
-	top: 150px;
 	left: 50%;
 	margin-left: -450px;
 	width: 50px;
@@ -122,5 +125,5 @@ footer li, ul dfn {
 }
 
 #line-numbers li:first-child {
-	padding-top: 12px;
+	padding-top: 162px;
 }
