@@ -107,6 +107,56 @@ var YUNG = {
                 }
             });
         });
+    },
+    animateFloral: function () {
+        var config = {
+            speed: 15 // Milliseconds per pixel of movement
+        };
+        var shift = function (el, top, left) {
+            var distance = Math.floor(Math.sqrt(left * left + top * top));
+            return el.animate({
+                marginLeft: (left < 0 ? "-=" : "+=") + Math.abs(left),
+                marginTop:  (top  < 0 ? "-=" : "+=") + Math.abs(top)
+            }, (distance * config.speed), "linear");
+        };
+        var tween = function (el, offsets) {
+            for (var i = 0; i < offsets.length; i++) {
+                shift(el, offsets[i][0], offsets[i][1]);
+            }
+            return el;
+        };
+        var createDrop = function (top, left, offsets) {
+            var el = $("<div class=\"drop\"></div>").prependTo("body").css({
+                marginLeft: left,
+                marginTop: top,
+                opacity: 0.5
+            });
+            return tween(el, offsets).animate({
+                marginLeft: "+=0",
+            }, 750).animate({
+                marginTop: "+=100",
+                opacity: 0
+            }, {
+                callback: function () {
+                    el.remove();
+                }
+            });
+        };
+        
+        var dropOne = function () {
+            createDrop(150, 279, [
+                [50, -6],
+                [50, -4],
+                [35, 1],
+                [25, 1],
+                [10, 1],
+                [15, 4],
+                [18, 5],
+                [16, 8],
+                [12, 9],
+                [11, 14]
+            ]);
+        }
     }
 };
 
@@ -114,6 +164,7 @@ $(document).ready(function () {
     YUNG.createEmailLink();
     YUNG.showLineNumbers();
     YUNG.attachAliasEffect();
+    YUNG.animateFloral();
 });
 
 try {

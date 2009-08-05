@@ -133,3 +133,12 @@ footer {
 #line-numbers li:first-child {
 	padding-top: 162px;
 }
+
+.drop {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	background: #fff;
+	width: 2px;
+	height: 2px;
+}
