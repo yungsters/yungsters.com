@@ -108,7 +108,7 @@ var YUNG = {
             });
         });
     },
-    animateFloral: function () {
+    animateDrops: function () {
         var config = {
             speed: 15,    // Milliseconds per pixel of movement
             gravity: 500, // Speed of the final fall
@@ -177,7 +177,7 @@ $(document).ready(function () {
     YUNG.createEmailLink();
     YUNG.showLineNumbers();
     YUNG.attachAliasEffect();
-    YUNG.animateFloral();
+    YUNG.animateDrops();
 });
 
 try {
