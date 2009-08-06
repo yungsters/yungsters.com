@@ -110,54 +110,66 @@ var YUNG = {
     },
     animateFloral: function () {
         var config = {
-            speed: 15 // Milliseconds per pixel of movement
+            speed: 15,    // Milliseconds per pixel of movement
+            gravity: 500, // Speed of the final fall
+            opacity: 0.5, // Opacity of the drop
+            filling: 0.9, // Opacity of the drop at the end
+            fall: 100,    // Distance of the final fall
+            pause: 750    // Pause before the final fall
         };
-        var shift = function (el, top, left) {
-            var distance = Math.floor(Math.sqrt(left * left + top * top));
-            return el.animate({
-                marginLeft: (left < 0 ? "-=" : "+=") + Math.abs(left),
-                marginTop:  (top  < 0 ? "-=" : "+=") + Math.abs(top)
-            }, (distance * config.speed), "linear");
+        var Drop = function (top, left, path) {
+            this.el = $("<div class=\"drop\"></div>");
+            this.path = path;
+            this.reset = function () {
+                this.el.css({
+                    marginTop:  top,
+                    marginLeft: left,
+                    opacity: 0.5
+                });
+            };
         };
-        var tween = function (el, offsets) {
-            for (var i = 0; i < offsets.length; i++) {
-                shift(el, offsets[i][0], offsets[i][1]);
+        Drop.prototype.shift = function (top, left, callback) {
+            var distance = Math.floor(Math.sqrt(top * top + left * left));
+            return this.el.animate({
+                marginTop:  (top  < 0 ? "-=" : "+=") + Math.abs(top),
+                marginLeft: (left < 0 ? "-=" : "+=") + Math.abs(left)
+            }, (distance * config.speed), "linear", callback);
+        };
+        Drop.prototype.animate = function (callback) {
+            $("body").prepend(this.el);
+            this.reset();
+            for (var i = 0; i < this.path.length; i++) {
+                this.shift(this.path[i][0], this.path[i][1]);
             }
-            return el;
-        };
-        var createDrop = function (top, left, offsets) {
-            var el = $("<div class=\"drop\"></div>").prependTo("body").css({
-                marginLeft: left,
-                marginTop: top,
-                opacity: 0.5
-            });
-            return tween(el, offsets).animate({
-                marginLeft: "+=0",
-            }, 750).animate({
-                marginTop: "+=100",
+            this.el.animate({
+                opacity: config.filling
+            }, config.pause).animate({
+                marginTop: "+=" + config.fall,
                 opacity: 0
-            }, {
-                callback: function () {
-                    el.remove();
+            }, config.gravity, "swing", function () {
+                $(this).remove();
+                if (callback) {
+                    callback();
                 }
             });
+            return this;
         };
         
-        var dropOne = function () {
-            createDrop(150, 279, [
+        var drops = [
+            new Drop(150, 279, [
                 [50, -6],
                 [50, -4],
-                [35, 1],
-                [25, 1],
-                [10, 1],
-                [15, 4],
-                [18, 5],
+                [35, 0],
+                [35, 3],
+                [33, 9],
                 [16, 8],
                 [12, 9],
                 [11, 14]
-            ]);
-        };
-        dropOne();
+            ])
+        ];
+        for (var i = 0; i < drops.length; i++) {
+            drops[i].animate();
+        }
     }
 };
 
