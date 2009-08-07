@@ -1,4 +1,5 @@
-/* Copyright (c) 2009, Timothy Yung & Anhang Zhu. All rights reserved. */
+/* Copyright (c) 2009, Timothy Yung. All rights reserved.
+   Special thanks to Anhang Zhu. */
 
 var YUNG = {
     createEmailLink: function () {
