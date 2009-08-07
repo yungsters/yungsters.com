@@ -110,11 +110,13 @@ var YUNG = {
     },
     animateDrops: function () {
         var config = {
-            speed: 15,    // Milliseconds per pixel of movement
-            gravity: 500, // Speed of the final fall
+            speed:   15,  // Milliseconds per pixel of movement
+            gravity: 500, // Milliseconds of the final fall
+            height:  2,   // Height of the drop (also defined in CSS)
+            growth:  2,   // Height change before the final fall
             opacity: 0.5, // Opacity of the drop
-            filling: 0.7, // Opacity of the drop at the end
-            fall: 200,    // Distance of the final fall
+            filling: 0.7, // Opacity of the drop before the final fall
+            fall:  200,   // Distance of the final fall
             pause: 750    // Pause before the final fall
         };
         var Drop = function (top, left, path) {
@@ -124,7 +126,7 @@ var YUNG = {
             this.initial = {
                 marginTop:  top,
                 marginLeft: left,
-                height:     this.el.css("height"),
+                height:     config.height,
                 opacity:    config.opacity
             };
         };
@@ -157,7 +159,7 @@ var YUNG = {
                 }
                 var self = this;
                 this.el.animate({
-                    height: 4,
+                    height: config.height + config.growth,
                     opacity: config.filling
                 }, config.pause).animate({
                     marginTop: "+=" + config.fall,
