@@ -112,8 +112,8 @@ var YUNG = {
         var config = {
             speed: 15,    // Milliseconds per pixel of movement
             gravity: 500, // Speed of the final fall
-            opacity: 0.6, // Opacity of the drop
-            filling: 0.9, // Opacity of the drop at the end
+            opacity: 0.5, // Opacity of the drop
+            filling: 0.7, // Opacity of the drop at the end
             fall: 200,    // Distance of the final fall
             pause: 750    // Pause before the final fall
         };
@@ -124,6 +124,7 @@ var YUNG = {
             this.initial = {
                 marginTop:  top,
                 marginLeft: left,
+                height:     this.el.css("height"),
                 opacity:    config.opacity
             };
         };
@@ -143,10 +144,11 @@ var YUNG = {
             return true;
         };
         Drop.prototype.shift = function (top, left) {
+            var distance = Math.sqrt(top * top + left * left);
             return this.el.animate({
                 marginTop:  (top  < 0 ? "-=" : "+=") + Math.abs(top),
                 marginLeft: (left < 0 ? "-=" : "+=") + Math.abs(left)
-            }, (top * config.speed), "linear");
+            }, (distance * config.speed), "linear");
         };
         Drop.prototype.animate = function (callback) {
             if (this.start()) {
@@ -155,6 +157,7 @@ var YUNG = {
                 }
                 var self = this;
                 this.el.animate({
+                    height: 4,
                     opacity: config.filling
                 }, config.pause).animate({
                     marginTop: "+=" + config.fall,
@@ -211,6 +214,28 @@ var YUNG = {
                 [14, 3],
                 [12, 5]
             ]),
+            new Drop(150, 265, [
+                [26, -19],
+                [31, -30],
+                [19, -24],
+                [12, -20],
+                [13, -32],
+                [13, -37],
+                [ 9, -19],
+                [ 8, -13],
+                [ 9, -10],
+                [ 9, -8],
+                [13, -4],
+                [ 9, -2],
+                [ 6, -1],
+                [49, -2],
+                [12, -3],
+                [13, -8],
+                [ 9, -9],
+                [ 7, -12],
+                [ 6, -19],
+                [ 3, -20]
+            ]),
             new Drop(150, 279, [
                 [50, -6],
                 [50, -4],
@@ -222,11 +247,12 @@ var YUNG = {
                 [11, 14]
             ])
         ];
-        setInterval(function () { drops[0].animate(); }, 4750);
-        setInterval(function () { drops[1].animate(); }, 2250);
-        setInterval(function () { drops[2].animate(); }, 9500);
-        setInterval(function () { drops[3].animate(); }, 6250);
-        drops[3].animate();
+        setInterval(function () { drops[0].animate(); },  4750);
+        setInterval(function () { drops[1].animate(); },  2250);
+        setInterval(function () { drops[2].animate(); }, 10000);
+        setInterval(function () { drops[3].animate(); },  7500);
+        setInterval(function () { drops[4].animate(); },  6250);
+        drops[4].animate();
     }
 };
 
