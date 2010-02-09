@@ -116,11 +116,13 @@ var YUNG = {
             growth:  2,   // Height change before the final fall
             opacity: 0.5, // Opacity of the drop
             filling: 0.7, // Opacity of the drop before the final fall
-            fall:  200,   // Distance of the final fall
-            pause: 750    // Pause before the final fall
+            fall:    200, // Distance of the final fall
+            pause:   750  // Pause before the final fall
         };
         var Drop = function (top, left, path) {
-            this.el = $("<div class=\"drop\"></div>");
+            this.el = $("<div></div>", {
+              className: "drop"
+            }).hide().prependTo("body");
             this.path = path;
             this.animating = false;
             this.initial = {
@@ -133,7 +135,7 @@ var YUNG = {
         Drop.prototype.start = function () {
             if (!this.animating) {
                 this.animating = true;
-                $("body").prepend(this.el);
+                this.el.show();
                 this.el.css(this.initial);
                 return true;
             } else {
@@ -141,7 +143,7 @@ var YUNG = {
             }
         };
         Drop.prototype.stop = function () {
-            this.el.remove();
+            this.el.hide();
             this.animating = false;
             return true;
         };
@@ -153,12 +155,12 @@ var YUNG = {
             }, (distance * config.speed), "linear");
         };
         Drop.prototype.animate = function (callback) {
-            if (this.start()) {
-                for (var i = 0; i < this.path.length; i++) {
-                    this.shift(this.path[i][0], this.path[i][1]);
+            var self = this;
+            if (self.start()) {
+                for (var i = 0; i < self.path.length; i++) {
+                    self.shift(self.path[i][0], self.path[i][1]);
                 }
-                var self = this;
-                this.el.animate({
+                self.el.animate({
                     height: config.height + config.growth,
                     opacity: config.filling
                 }, config.pause).animate({
@@ -171,7 +173,7 @@ var YUNG = {
                     }
                 });
             }
-            return this;
+            return self;
         };
         
         var drops = [
