@@ -276,14 +276,32 @@ var YUNG = {
                 [8, -12]
             ])
         ];
-        setInterval(function () { drops[0].animate(); },  4750);
-        setInterval(function () { drops[1].animate(); },  2250);
-        setInterval(function () { drops[2].animate(); }, 10000);
-        setInterval(function () { drops[3].animate(); },  7500);
-        setInterval(function () { drops[4].animate(); },  6250);
+        
+        // Invoke callback if this window is active.
+        var ifActive = (function () {
+          var lastActive = (new Date()).getTime();
+          var inactivity = 5000; // ms
+          $(window).mousemove(function () {
+            lastActive = (new Date()).getTime();
+          });
+          return function (callback) {
+            return function () {
+              var now = (new Date()).getTime();
+              if (lastActive > now - inactivity) {
+                callback();
+              }
+            }
+          };
+        })();
+        
+        setInterval(ifActive(function () { drops[0].animate(); }),  4750);
+        setInterval(ifActive(function () { drops[1].animate(); }),  2250);
+        setInterval(ifActive(function () { drops[2].animate(); }), 10000);
+        setInterval(ifActive(function () { drops[3].animate(); }),  7500);
+        setInterval(ifActive(function () { drops[4].animate(); }),  6250);
         drops[4].animate();
-        setInterval(function () { drops[5].animate(); },  3000);
-        setInterval(function () { drops[6].animate(); },  5000);
+        setInterval(ifActive(function () { drops[5].animate(); }),  3000);
+        setInterval(ifActive(function () { drops[6].animate(); }),  5000);
     }
 };
 
