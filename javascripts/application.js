@@ -1,12 +1,20 @@
-/* Copyright (c) 2009, Timothy Yung. All rights reserved.
+/* Copyright (c) 2009-2011, Timothy Yung. All rights reserved.
    Special thanks to Anhang Zhu. */
 
 var YUNG = {
-    createEmailLink: function () {
-        var domain = "gmail.com"; // Indirection to trick spambots
-        $("a:last").attr({ href: "mailto:yungsters@" + domain });
+    init: function () {
+        this.initEmailLink();
+        this.initLineNumbers();
+        this.initAliasEffect();
+        this.initDrops();
     },
-    showLineNumbers: function () {
+    initEmailLink: function () {
+        // Indirect creation of href to trick ze spambots.
+        $("a:last").attr({
+            href: ["m", "ilto:yungsters@gm", "il.com"].join("a")
+        });
+    },
+    initLineNumbers: function () {
         var config = {
             duration: 200,   // Fade duration
             delay:    25,    // Delay between adding lines
@@ -51,7 +59,7 @@ var YUNG = {
         setInterval(function () {
             fadeNumbers(firstEl);
         }, config.interval);
-
+        
         $("a[data-line]").mouseover(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
             var el = $("li:eq(" + (lineNumber - 1) + ")", container);
@@ -63,7 +71,7 @@ var YUNG = {
             el.css({ opacity: config.normal });
         });
     },
-    attachAliasEffect: function () {
+    initAliasEffect: function () {
         var config = {
             delay: 70,         // Delay between transforming characters
             alias: "yungsters" // Target replacement string
@@ -108,7 +116,7 @@ var YUNG = {
             });
         });
     },
-    animateDrops: function () {
+    initDrops: function () {
         var config = {
             speed:   15,  // Milliseconds per pixel of movement
             gravity: 500, // Milliseconds of the final fall
@@ -306,10 +314,7 @@ var YUNG = {
 };
 
 $(document).ready(function () {
-    YUNG.createEmailLink();
-    YUNG.showLineNumbers();
-    YUNG.attachAliasEffect();
-    YUNG.animateDrops();
+    YUNG.init();
 });
 
 try {
