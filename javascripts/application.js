@@ -310,11 +310,110 @@ var YUNG = {
         drops[4].animate();
         setInterval(ifActive(function () { drops[5].animate(); }),  3000);
         setInterval(ifActive(function () { drops[6].animate(); }),  5000);
-    }
+    },
+    initTranslation: (function () {
+        var config = {
+                delay:    200,
+                variance: 100
+            },
+            getDelay = function () {
+                return Math.floor(config.delay + (
+                    (Math.random() * 100 % (config.variance * 2)
+                ) - config.variance));
+            },
+            stepThrough = function (stepConfig) {
+                var steps = [];
+                
+                for (var i = 0; i < stepConfig.length; i++) {
+                    steps.push(new Step(stepConfig[i]));
+                }
+                
+                var nextStep = function () {
+                    steps[0].execute() === 0 && steps.shift();
+                    if (steps.length > 0) {
+                        setTimeout(nextStep, getDelay());
+                    }
+                };
+                nextStep();
+            };
+        
+        var Step = function (config) {
+            this.count  = config.shift();
+            this.action = config.shift();
+            this.args   = config;
+        };
+        Step.prototype = {
+            execute: function () {
+                if (this.count > 0) {
+                    this.action.apply(this, this.args);
+                    this.count -= 1;
+                }
+                return this.count;
+            }
+        };
+        
+        return function () {
+            var _dfn  = $("dfn"),
+                _em   = $("em"),
+                _ul   = $("ul"),
+                _code = $("code");
+            
+            var steps;
+            
+            // Line 1
+            stepThrough([
+                [ 4, function (a) { $(_dfn[0]).before(a.shift()); }, ['v', 'a', 'r', ' '] ],
+                [ 2, function (n) { n.nodeValue = n.nodeValue.substring(1); }, _dfn[0].nextSibling ],
+                [ 4, function () { $(_dfn[1]).html($(_dfn[1]).html().substr(0, $(_dfn[1]).html().length - 1)); } ],
+                [ 1, function () { $(_dfn[1]).remove(); } ],
+                [ 1, function () { $(_em[1]).before($(_dfn[1])); } ],
+                [ 4, function (a) { $(_dfn[1]).html($(_dfn[1]).html() + a.shift()); }, ['l', 'i', 'a', 's'] ],
+                [ 3, function (a) { $(_em[1]).before(a.shift()) }, [' ', '=', ' '] ],
+                [ 1, function () { $(_em[1]).after(';') } ]
+            ]);
+            
+            // Line 3-10
+            steps = [];
+            steps.push(
+                [ 4, function (a) { $(_dfn[2]).before(a.shift()); }, ['v', 'a', 'r', ' '] ],
+                [ 1, function () { $(_dfn[2]).after('<dfn />'); _dfn = $("dfn"); } ],
+                [ 3, function (a) { $(_dfn[2]).after(a.shift()); }, [' ', '=', ' '] ],
+                [ 1, function () { $(_dfn[3]).html('p'); } ]
+            );
+            var li = $(_ul[0]).find('li');
+            li.each(function (index) {
+                steps.push(
+                    [ 1, function (n) { n.html(n.html().substring(1)); }, $(this).find('dfn') ],
+                    [ 3, function (n) { n.nodeValue = n.nodeValue.substring(1); }, $(this).find('dfn')[0].nextSibling ],
+                    [ 3, function (n, a) { n.before(a.shift()) }, $(this).find('em'), [':', ' ', ' '] ]
+                );
+                if (index < li.length - 1) {
+                    steps.push(
+                        [ 1, function (n, a) { n.after(',') }, $(this).find('em') ]
+                    );
+                }
+            });
+            steps.push(
+                [ 1, function () { $(_code[0]).css({ background: '#fff', color: '#000' }); } ],
+                [ 1, function () { $(_code[0]).css({ background: '', color: '' }).html(''); } ]
+            );
+            var code = '}; $.each(presence, function(n,p) { sys.print(\'<a href="\'+p+\'">\'+n+\'</a>\'); });'.split('');
+            code = '}; p.keys.map(function (n) {return \'<a href="\' + p[n] + \'">\' + n + \'</a>\');}).join(\'<br />\');'.split('');
+            steps.push(
+                [ code.length, function (a) { $(_code[0]).html($(_code[0]).html() + a.shift()); }, code ]
+            );
+            stepThrough(steps);
+            
+            
+        };
+    })()
 };
 
 $(document).ready(function () {
     YUNG.init();
+    setTimeout(function () {
+        YUNG.initTranslation();
+    }, 2500);
 });
 
 try {
