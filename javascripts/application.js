@@ -419,8 +419,7 @@ var YUNG = {
                 
                 var shortKey = _dfn.html()[0];
                 
-                steps = translateDeclaration(this, shortKey)
-                    .concat(translateObject(this));
+                steps = translateDeclaration(this, shortKey);
                 
                 steps.push(
                     [ 1, function () { $(_code[0]).css({ background: '#fff', color: '#000' }); } ],
@@ -435,6 +434,8 @@ var YUNG = {
                 );
                 
                 stepThrough(steps, this);
+                
+                stepThrough(translateObject(this), this);
             };
             
             var translateAside = function () {
