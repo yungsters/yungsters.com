@@ -313,15 +313,15 @@ var YUNG = {
     },
     initTranslation: (function () {
         var config = {
-                delay:    200,
-                variance: 100
+                delay:    175,
+                variance: 125
             },
             getDelay = function () {
                 return Math.floor(config.delay + (
                     (Math.random() * 100 % (config.variance * 2)
                 ) - config.variance));
             },
-            stepThrough = function (stepConfig) {
+            stepThrough = function (stepConfig, context) {
                 var steps = [];
                 
                 for (var i = 0; i < stepConfig.length; i++) {
@@ -329,7 +329,7 @@ var YUNG = {
                 }
                 
                 var nextStep = function () {
-                    steps[0].execute() === 0 && steps.shift();
+                    steps[0].execute(context) === 0 && steps.shift();
                     if (steps.length > 0) {
                         setTimeout(nextStep, getDelay());
                     }
@@ -343,9 +343,9 @@ var YUNG = {
             this.args   = config;
         };
         Step.prototype = {
-            execute: function () {
+            execute: function (context) {
                 if (this.count > 0) {
-                    this.action.apply(this, this.args);
+                    this.action.apply(context || this, this.args);
                     this.count -= 1;
                 }
                 return this.count;
@@ -355,8 +355,7 @@ var YUNG = {
         return function () {
             var _dfn  = $("dfn"),
                 _em   = $("em"),
-                _ul   = $("ul"),
-                _code = $("code");
+                _ul   = $("ul");
             
             var steps;
             
@@ -370,41 +369,100 @@ var YUNG = {
                 [ 4, function (a) { $(_dfn[1]).html($(_dfn[1]).html() + a.shift()); }, ['l', 'i', 'a', 's'] ],
                 [ 3, function (a) { $(_em[1]).before(a.shift()) }, [' ', '=', ' '] ],
                 [ 1, function () { $(_em[1]).after(';') } ]
-            ]);
+            ], this);
             
-            // Line 3-10
-            steps = [];
-            steps.push(
-                [ 4, function (a) { $(_dfn[2]).before(a.shift()); }, ['v', 'a', 'r', ' '] ],
-                [ 1, function () { $(_dfn[2]).after('<dfn />'); _dfn = $("dfn"); } ],
-                [ 3, function (a) { $(_dfn[2]).after(a.shift()); }, [' ', '=', ' '] ],
-                [ 1, function () { $(_dfn[3]).html('p'); } ]
-            );
-            var li = $(_ul[0]).find('li');
-            li.each(function (index) {
+            var translateDeclaration = function (container, shortKey) {
+                var steps = [],
+                    _dfn  = $(container).find('dfn:first');
+                
                 steps.push(
-                    [ 1, function (n) { n.html(n.html().substring(1)); }, $(this).find('dfn') ],
-                    [ 3, function (n) { n.nodeValue = n.nodeValue.substring(1); }, $(this).find('dfn')[0].nextSibling ],
-                    [ 3, function (n, a) { n.before(a.shift()) }, $(this).find('em'), [':', ' ', ' '] ]
+                    [ 4, function (a) { _dfn.before(a.shift()); }, ['v', 'a', 'r', ' '] ]
                 );
-                if (index < li.length - 1) {
+                
+                if (shortKey) {
                     steps.push(
-                        [ 1, function (n, a) { n.after(',') }, $(this).find('em') ]
+                        [ 1, function () { _dfn.after('<dfn />'); } ],
+                        [ 3, function (a) { _dfn.after(a.shift()); }, [' ', '=', ' '] ],
+                        [ 1, function () { $(container).find('dfn')[1].innerHTML = shortKey; } ]
                     );
                 }
-            });
-            steps.push(
-                [ 1, function () { $(_code[0]).css({ background: '#fff', color: '#000' }); } ],
-                [ 1, function () { $(_code[0]).css({ background: '', color: '' }).html(''); } ]
-            );
-            var code = '}; $.each(presence, function(n,p) { sys.print(\'<a href="\'+p+\'">\'+n+\'</a>\'); });'.split('');
-            code = '}; p.keys.map(function (n) {return \'<a href="\' + p[n] + \'">\' + n + \'</a>\');}).join(\'<br />\');'.split('');
-            steps.push(
-                [ code.length, function (a) { $(_code[0]).html($(_code[0]).html() + a.shift()); }, code ]
-            );
-            stepThrough(steps);
+                
+                return steps;
+            };
             
+            var translateObject = function (container) {
+                var steps = [],
+                    li = $(container).find('li');
+                
+                li.each(function (index) {
+                    steps.push(
+                        [ 1, function (n) { n.html(n.html().substring(1)); }, $(this).find('dfn') ],
+                        [ 3, function (n) { n.nodeValue = n.nodeValue.substring(1); }, $(this).find('dfn')[0].nextSibling ],
+                        [ 3, function (n, a) { n.before(a.shift()) }, $(this).find('em, strong'), [':', ' ', ' '] ]
+                    );
+                    if (index < li.length - 1) {
+                        steps.push(
+                            [ 1, function (n, a) { n.after(',') }, $(this).find('em, strong') ]
+                        );
+                    }
+                });
+                
+                return steps;
+            };
             
+            var translateSection = function () {
+                var _dfn  = $(this).find('dfn:first'),
+                    _code = $(this).find('code:last');
+                
+                var shortKey = _dfn.html()[0];
+                
+                steps = translateDeclaration(this, shortKey)
+                    .concat(translateObject(this));
+                
+                steps.push(
+                    [ 1, function () { $(_code[0]).css({ background: '#fff', color: '#000' }); } ],
+                    [ 1, function () { $(_code[0]).css({ background: '', color: '' }).html('&nbsp;'); } ]
+                );
+                var code = (
+                    '}; ' + shortKey + '.keys.map(function (n) {return \'<a href="\'' + shortKey + '[n] + \'">\' + n + \'</a>\');}).join(\'<br />\');'
+                ).split('');
+                steps.push(
+                    [ 1, function (a) { _code.html(a.shift()); }, code ],
+                    [ code.length - 1, function (a) { _code.html(_code.html() + a.shift()); }, code ]
+                );
+                
+                stepThrough(steps, this);
+            };
+            
+            var translateAside = function () {
+                var _code = $(this).find('code:last');
+                
+                steps = translateDeclaration(this)
+                    .concat(translateObject(this));
+                
+                steps.push(
+                    [ 1, function () { _code.html(_code.html() + ';'); } ]
+                );
+                
+                stepThrough(steps, this);
+            };
+            
+            var translateFooter = function () {
+                var _code = $(this).find('code:last');
+                
+                steps = translateDeclaration(this);
+                
+                steps.push(
+                    [ 4, function () { _code.html(_code.html().substr(0, _code.html().length - 1)); } ],
+                    [ 6, function (a) { _code.html(_code.html() + a.shift()); }, ['(', '\'', ' ', '\'', ')', ';'] ]
+                );
+                
+                stepThrough(steps, this);
+            };
+            
+            $('section').each(translateSection);
+            $('aside').each(translateAside);
+            $('footer').each(translateFooter);
         };
     })()
 };
