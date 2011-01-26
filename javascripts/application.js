@@ -7,6 +7,9 @@ var YUNG = {
         this.initLineNumbers();
         this.initAliasEffect();
         this.initDrops();
+        setTimeout(function () {
+            YUNG.initTranslation();
+        }, 1500);
     },
     initEmailLink: function () {
         // Indirect creation of href to trick ze spambots.
@@ -469,9 +472,6 @@ var YUNG = {
 
 $(document).ready(function () {
     YUNG.init();
-    setTimeout(function () {
-        YUNG.initTranslation();
-    }, 2500);
 });
 
 try {
