@@ -426,7 +426,7 @@ var YUNG = {
                     [ 1, function () { $(_code[0]).css({ background: '', color: '' }).html('&nbsp;'); } ]
                 );
                 var code = (
-                    '}; ' + shortKey + '.keys.map(function (n) {return \'<a href="\' + ' + shortKey + '[n] + \'">\' + n + \'</a>\');}).join(\'<br />\');'
+                    '}; ' + shortKey + '.keys.map(function(n) { return \'<a href="\'+' + shortKey + '[n]+\'">\'+n+\'</a>\'); }).join(\'<br />\');'
                 ).split('');
                 steps.push(
                     [ 1, function (a) { _code.html(a.shift()); }, code ],
