@@ -30,9 +30,9 @@ var YUNG = {
         var firstEl    = $("<li>1</li>").appendTo(container);
         var eachHeight = firstEl.height();
         var numCount   = 1;
-        
+
         firstEl.fadeTo(config.duration, config.normal);
-        
+
         var addNumbers = function () {
             if ((numCount * eachHeight) < container.height()) {
                 var el = $("<li>" + ++numCount + "</li>").appendTo(container);
@@ -46,7 +46,7 @@ var YUNG = {
         };
         resizeContainer();
         $(window).resize(resizeContainer);
-        
+
         var fadeNumbers = function (el) {
             setTimeout(function () {
                 var nextEl = el.next("li");
@@ -62,7 +62,7 @@ var YUNG = {
         setInterval(function () {
             fadeNumbers(firstEl);
         }, config.interval);
-        
+
         $("a[data-line]").mouseover(function () {
             var lineNumber = parseInt(this.getAttribute("data-line"), 10);
             var el = $("li:eq(" + (lineNumber - 1) + ")", container);
@@ -108,7 +108,7 @@ var YUNG = {
                 }, config.delay);
             }
         };
-        
+
         $("mark").each(function (i) {
             var el = this;
             $(el).closest("a").mouseover(function () {
@@ -186,7 +186,7 @@ var YUNG = {
             }
             return self;
         };
-        
+
         var drops = [
             new Drop(150, 145, [
                 [ 8, -2],
@@ -287,7 +287,7 @@ var YUNG = {
                 [8, -12]
             ])
         ];
-        
+
         // Invoke callback if this window is active.
         var ifActive = (function () {
           var lastActive = (new Date()).getTime();
@@ -304,7 +304,7 @@ var YUNG = {
             }
           };
         })();
-        
+
         setInterval(ifActive(function () { drops[0].animate(); }),  4750);
         setInterval(ifActive(function () { drops[1].animate(); }),  2250);
         setInterval(ifActive(function () { drops[2].animate(); }), 10000);
@@ -326,11 +326,11 @@ var YUNG = {
             },
             stepThrough = function (stepConfig, context) {
                 var steps = [];
-                
+
                 for (var i = 0; i < stepConfig.length; i++) {
                     steps.push(new Step(stepConfig[i]));
                 }
-                
+
                 var nextStep = function () {
                     steps[0].execute(context) === 0 && steps.shift();
                     if (steps.length > 0) {
@@ -339,7 +339,7 @@ var YUNG = {
                 };
                 nextStep();
             };
-        
+
         var Step = function (config) {
             this.count  = config.shift();
             this.action = config.shift();
@@ -354,17 +354,17 @@ var YUNG = {
                 return this.count;
             }
         };
-        
+
         return function () {
             var _dfn  = $("dfn"),
                 _em   = $("em"),
                 _ul   = $("ul");
-            
+
             var steps;
-            
+
             // Line 1
             stepThrough([
-                [ 4, function (a) { $(_dfn[0]).before(a.shift()); }, ['v', 'a', 'r', ' '] ],
+                [ 6, function (a) { $(_dfn[0]).before(a.shift()); }, 'const '.split('') ],
                 [ 2, function (n) { n.nodeValue = n.nodeValue.substring(1); }, _dfn[0].nextSibling ],
                 [ 4, function () { $(_dfn[1]).html($(_dfn[1]).html().substr(0, $(_dfn[1]).html().length - 1)); } ],
                 [ 1, function () { $(_dfn[1]).remove(); } ],
@@ -373,15 +373,15 @@ var YUNG = {
                 [ 3, function (a) { $(_em[1]).before(a.shift()) }, [' ', '=', ' '] ],
                 [ 1, function () { $(_em[1]).after(';') } ]
             ], this);
-            
+
             var translateDeclaration = function (container, shortKey) {
                 var steps = [],
                     _dfn  = $(container).find('dfn:first');
-                
+
                 steps.push(
-                    [ 4, function (a) { _dfn.before(a.shift()); }, ['v', 'a', 'r', ' '] ]
+                    [ 6, function (a) { _dfn.before(a.shift()); }, 'const '.split('') ]
                 );
-                
+
                 if (shortKey) {
                     steps.push(
                         [ 1, function () { _dfn.after('<dfn />'); } ],
@@ -389,14 +389,14 @@ var YUNG = {
                         [ 1, function () { $(container).find('dfn')[1].innerHTML = shortKey; } ]
                     );
                 }
-                
+
                 return steps;
             };
-            
+
             var translateObject = function (container) {
                 var steps = [],
                     li = $(container).find('li');
-                
+
                 li.each(function (index) {
                     steps.push(
                         [ 1, function (n) { n.html(n.html().substring(1)); }, $(this).find('dfn') ],
@@ -409,61 +409,61 @@ var YUNG = {
                         );
                     }
                 });
-                
+
                 return steps;
             };
-            
+
             var translateSection = function () {
                 var _dfn  = $(this).find('dfn:first'),
                     _code = $(this).find('code:last');
-                
-                var shortKey = _dfn.html()[0];
-                
-                steps = translateDeclaration(this, shortKey);
-                
+
+                var varName = _dfn.html();
+
+                steps = translateDeclaration(this);
+
                 steps.push(
                     [ 1, function () { $(_code[0]).css({ background: '#fff', color: '#000' }); } ],
                     [ 1, function () { $(_code[0]).css({ background: '', color: '' }).html('&nbsp;'); } ]
                 );
                 var code = (
-                    '}; ' + shortKey + '.keys.map(function(n) { return \'<a href="\'+' + shortKey + '[n]+\'">\'+n+\'</a>\'; }).join(\'<br />\');'
+                    '}; Object.entries(' + varName + ').map(([k,v]) => \'<a href="\'+k+\'">\'+v+\'</a>\').join(\'<br />\');'
                 ).split('');
                 steps.push(
                     [ 1, function (a) { _code.html(a.shift()); }, code ],
                     [ code.length - 1, function (a) { _code.html(_code.html() + a.shift()); }, code ]
                 );
-                
+
                 stepThrough(steps, this);
-                
+
                 stepThrough(translateObject(this), this);
             };
-            
+
             var translateAside = function () {
                 var _code = $(this).find('code:last');
-                
+
                 steps = translateDeclaration(this)
                     .concat(translateObject(this));
-                
+
                 steps.push(
                     [ 1, function () { _code.html(_code.html() + ';'); } ]
                 );
-                
+
                 stepThrough(steps, this);
             };
-            
+
             var translateFooter = function () {
                 var _code = $(this).find('code:last');
-                
+
                 steps = translateDeclaration(this);
-                
+
                 steps.push(
                     [ 4, function () { _code.html(_code.html().substr(0, _code.html().length - 1)); } ],
                     [ 6, function (a) { _code.html(_code.html() + a.shift()); }, ['(', '\'', ' ', '\'', ')', ';'] ]
                 );
-                
+
                 stepThrough(steps, this);
             };
-            
+
             $('section').each(translateSection);
             $('aside').each(translateAside);
             $('footer').each(translateFooter);
